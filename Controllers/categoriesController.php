@@ -1,8 +1,14 @@
 <?php
 namespace shoppingCart\Controllers;
 
-use shoppingCart\repositories\CategoryRepository;
-use ShoppingCart\Repositories\UserRepository;
+use shoppingCart\Repositories\CategoryRepository;
+use shoppingCart\Repositories\UserRepository;
+
+/**
+ * Class categoriesController
+ * @package shoppingCart\Controllers
+ * @var \shoppingCart\Models\Category $category[]
+ */
 class categoriesController extends shopController
 {
 
@@ -15,6 +21,7 @@ class categoriesController extends shopController
        foreach ($this->currentUser->getCategories() as $category)
        {
 
+
            if($category->getId() == $this->request->id ) {
 
                $hasCategory = true;
@@ -24,6 +31,8 @@ class categoriesController extends shopController
 
        }
 
+
+
            if(!$hasCategory ){
               $this->redirect('shop');
            }
@@ -32,9 +41,7 @@ class categoriesController extends shopController
            $this->redirect('shop');
 
 
-
     }
-
 
 
 

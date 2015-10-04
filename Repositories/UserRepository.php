@@ -1,10 +1,12 @@
 <?php
-namespace shoppingCart\repositories;
+namespace shoppingCart\Repositories;
 
 use shoppingCart\Db;
 use shoppingCart\models\Category;
-use shoppingCart\models\products;
 use shoppingCart\Models\user;
+use shoppingCart\Models\UserProduct;
+use shoppingCart\Models\Product;
+use shoppingCart\Models\ProductLevel;
 
 class UserRepository
 {
@@ -45,7 +47,7 @@ class UserRepository
         $query = "SELECT id,username,cash password FROM users
                           WHERE username = ? AND password = ? ";
 
-        $this->db->query($query, [$user, md5($pass)]);
+        $this->db->query($query, [htmlspecialchars($user), md5($pass)]);
         $result = $this->db->row();
 
         if (empty($result)) return false;
@@ -72,7 +74,7 @@ class UserRepository
             $result['cash']
         );
 
-        $this->db->query("SELECT id, name, user_id
+        $this->db->query("SELECT id, name,cart_money ,user_id
         FROM categories WHERE user_id = ?", [$id]);
         $categoriesResult = $this->db->fetchAll();
         $categories = [];
@@ -80,10 +82,55 @@ class UserRepository
             $categories[] = new Category(
                 $categoryResult['id'],
                 $categoryResult['name'],
+                $categoryResult['cart_money'],
                 $user
+
             );
         }
+//New------------------------------------------------
+        $this->db->query("SELECT id, user_id, category_id, product_id, level_id
+        FROM user_products WHERE user_id = ?", [$id]);
+        $userProductsResult = $this->db->fetchAll();
+        $userProductsCollection = [];
+        foreach ($userProductsResult as $userProductResult) {
+            $this->db->query("SELECT id, name ,price FROM products WHERE id = ?",
+                [$userProductResult['product_id']]);
+            $productResult = $this->db->row();
+            $product = new Product($productResult['id'],
+                $productResult['name'],
+                $productResult['price']);
+            $productLevelsCollection = [];
+            $this->db->query("SELECT product_id, level_id, cash_consume,
+quantity_consume, cash_income,quantity_income
+FROM product_level WHERE product_id = ? AND level_id = ?",
+                [$product->getId(), $userProductResult['level_id']]);
+            $productLevelsResult = $this->db->fetchAll();
+            $category = current(array_filter($categories, function(category $u) use ($userProductResult) {
+                return $u->getId() == $userProductResult['category_id'];
+            }));
+            foreach ($productLevelsResult as $productLevelResult) {
+                $productLevel = new ProductLevel(
+                    $product,
+                    $productLevelResult['level_id'],
+                    $productLevelResult['cash_consume'],
+                    $productLevelResult['quantity_consume'],
+                    $productLevelResult['cash_income'],
+                    $productLevelResult['quantity_income']
+                );
+                $productLevelsCollection[] = $productLevel;
+                $userProductsCollection[] = new userProduct(
+                    $user,
+                    $product,
+                    $productLevel,
+                    $category
+                );
+            }
+        }
+
+// END--
         $user->setCategories($categories);
+        $user->setProducts($userProductsCollection);
+
 
         return $user;
     }

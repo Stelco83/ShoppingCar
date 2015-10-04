@@ -42,7 +42,7 @@ class CategoryRepository
 
     public function getOne($id)
     {
-        $query = "SELECT id, name, user_id
+        $query = "SELECT id, name, cart_money ,user_id
         FROM categories WHERE id = ?";
 
         $this->db->query($query);
@@ -55,6 +55,7 @@ class CategoryRepository
         $category = new Category(
             $result['id'],
             $result['name'],
+            $result['cart_money'],
             $user
         );
 
@@ -68,7 +69,7 @@ class CategoryRepository
 
    public function getAll()
    {
-       $query = "SELECT id, name, user_id
+       $query = "SELECT id, name,cart_money, user_id
         FROM categories ";
 
        $this->db->query($query);
@@ -79,9 +80,11 @@ class CategoryRepository
        foreach ($result as $row) {
 
            $user = UserRepository::create()->getOne($row['user_id']);
+
            $collection[] = new Category(
                $row['id'],
                $row['name'],
+               $row['cart_money'],
                $user
            );
        }
@@ -109,14 +112,6 @@ class CategoryRepository
     }
 
 
-    public function delete(user $user)
-    {
-
-                    $query = "DELETE FROM users WHERE id = 13; ";
-                    $this->db->query($query);
-                    return $this->db->rows() > 0;
-
-    }
 
 
 }

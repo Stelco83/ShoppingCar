@@ -11,10 +11,16 @@ class user
 
     private $password;
 
+
     /**
      *  Category[]
      */
     private $categories;
+
+    /**
+     * @var UserProduct[]
+     */
+    private $products;
 
     public function __construct ($id=null ,$username, $password)
 
@@ -22,6 +28,7 @@ class user
         $this->setId($id);
         $this->setUsername($username);
         $this->setPassword($password);
+
     }
 
     /**
@@ -88,17 +95,30 @@ class user
         $this->username = $username;
     }
 
+    /**
+     * @return UserProduct[]
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param UserProduct[] $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+
+
 
 
 
     public function save()
     {
         return UserRepository::create()->save($this);
-    }
-
-    public function delete ()
-    {
-        return UserRepository::create()->delete($this);
     }
 
 

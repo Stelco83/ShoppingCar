@@ -70,13 +70,13 @@ try {
         $controllerName
     );
 } catch (\Exception $e) {
-    echo "wrong url, controller do not exist";
+    echo "wrong url, controller do not exist; ";
 }
 if (!$actionName) {
     $actionName = "index";
 }
 if (!method_exists($controller, $actionName)) {
-    die("wrong url, action do not exist");
+    die("wrong url, action do not exist; ");
 }
 
 

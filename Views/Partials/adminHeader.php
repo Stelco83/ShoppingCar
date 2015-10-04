@@ -1,5 +1,7 @@
 <?php /** * @var \shoppingCart\Models\user $user[] */
-if($_SESSION['userid'] == 1 ) {$isAdmin = true;}?>
+if($_SESSION['userid'] == 1 ) {$isAdmin = true;}
+
+?>
 
 <?php if(!isset($_SESSION['userid']) && $isAdmin == false) : ?>
 

@@ -14,7 +14,7 @@ class UsersController extends Controller
         $this->view->partial('guestHeader');
 
         if(isset($_POST['login']) ) {
-            $username = $_POST['username'];
+            $username = htmlspecialchars ($_POST ['username']);
             $password = $_POST['password'];
             $user = UserRepository::create()
                 ->getOneByDetails($username, $password);
@@ -40,7 +40,7 @@ class UsersController extends Controller
     {
         $this->view->error = false;
         if (isset($_POST['register'])) {
-            $username = $_POST['username'];
+            $username = htmlspecialchars($_POST['username']);
             $password = $_POST[('password')];
             $user = new user($id=null,$username, md5($password),$products=null);
             if (!$user->save()) {

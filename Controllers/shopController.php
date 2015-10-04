@@ -9,6 +9,10 @@ class shopController extends Controller
     * @var \ShoppingCart\Models\User
     */
     protected $currentUser = null;
+
+    /**
+     * @var \shoppingCart\Models\Category
+     */
     protected $currentCategory = null;
 
 protected function onLoad()
@@ -27,9 +31,13 @@ protected function onLoad()
         $this->currentCategory =
             CategoryRepository::create()->getOne($_SESSION['category_id']);
 
+
     }
 
     $this->view->userName = $this->currentUser->getUsername();
+
+
+
     $this->view->partial('authHeader');
     $this->view->partial('adminHeader');
     $this->view->partial('login');

@@ -8,15 +8,18 @@ class Category
 
     private $name;
 
+    private $cart_money;
+
     /**
      * @var user
      */
     private $user;
 
 
-    public function __construct( $id, $name, user $user){
+    public function __construct( $id, $name, $cart_money ,user $user){
         $this->setId($id);
         $this->setName($name);
+        $this->setCartMoney($cart_money);
         $this->setUser($user);
 
     }
@@ -67,6 +70,22 @@ class Category
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCartMoney()
+    {
+        return $this->cart_money;
+    }
+
+    /**
+     * @param mixed $cart_money
+     */
+    public function setCartMoney($cart_money)
+    {
+        $this->cart_money = $cart_money;
     }
 
 
