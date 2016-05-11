@@ -1,6 +1,6 @@
 -- phpMyAdmin SQL Dump
 -- version 4.2.11
--- . http://www.phpmyadmin.net
+--  http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
 
